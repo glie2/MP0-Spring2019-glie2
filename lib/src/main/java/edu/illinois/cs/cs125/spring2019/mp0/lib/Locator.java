@@ -9,6 +9,7 @@ import java.util.Random;
  *
  * @see <a href="https://cs125.cs.illinois.edu/MP/0/">MP0 Documentation</a>
  */
+@SuppressWarnings("ALL")
 public class Locator {
 
     /** Maximum valid latitude. */
@@ -47,7 +48,23 @@ public class Locator {
      */
     public static int farthestNorth(final double[] latitudes, final double[] longitudes,
                                     final boolean[] validLocations) {
-        return 0;
+        //Max Latitude from inputs
+        double maxLatitude = MIN_LATITUDE;
+        //Index tracker variable
+        int maxLatitudeindex = -1;
+
+        for (int i = 0; i < latitudes.length; i++) {
+
+            if (validLocations[i]) {
+                if ((latitudes[i] <= MAX_LATITUDE) && (latitudes[i] >= MIN_LATITUDE)) {
+                    if (latitudes[i] > maxLatitude) {
+                        maxLatitude = latitudes[i];
+                        maxLatitudeindex = i;
+                    }
+                }
+            }
+        }
+        return maxLatitudeindex;
     }
 
     /**
@@ -66,6 +83,15 @@ public class Locator {
     public static boolean beenHere(final int currentIndex,
                             final double[] latitudes, final double[] longitudes,
                             final boolean[] validLocations) {
+        if (latitudes.length > 1) {
+            for (int i = 0; i < latitudes.length; i++) {
+                if ((i != currentIndex) && (validLocations[i])) {
+                    if((latitudes[i] == latitudes[currentIndex]) && (longitudes[i] == longitudes[currentIndex])) {
+                        return true;
+                    }
+                }
+            }
+        }
         return false;
     }
 
@@ -95,6 +121,26 @@ public class Locator {
     public static double[] nextRandomLocation(final double currentLatitude, final double currentLongitude,
                                        final double transitionProbability,
                                        final double latitudeChange, final double longitudeChange) {
-        return new double[] {0.0, 0.0};
+        Random rand = new Random();
+        double probability = 0 + (1 - 0)*rand.nextDouble();
+
+        if (transitionProbability == probability) {
+            currentLatitude = currentLatitude * latitudeChange;
+            currentLongitude = currentLongitude * longitudeChange;
+        }
+        if (currentLatitude > 90.0) {
+            currentLatitude = 90.0;
+        }
+        if (currentLatitude < -90.0) {
+            currentLatitude = -90.0;
+        }
+        if (currentLongitude > 90.0) {
+            currentLongitude = 90.0;
+        }
+        if (currentLongitude < -90.0) {
+            currentLongitude = -90.0;
+        }
+
+        return new double[] {currentLatitude, currentLongitude};
     }
 }
