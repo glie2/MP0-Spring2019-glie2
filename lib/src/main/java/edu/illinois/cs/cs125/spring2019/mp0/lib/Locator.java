@@ -20,9 +20,8 @@ public class Locator {
 
     /** Maximum valid longitude. */
     public static final double MAX_LONGITUDE = 180.0;
-
+    /** Minimum valid longitude. */
     public static final double MIN_LONGITUDE = -180.0;
-
     /** Random number generator for use by this class. */
     private static Random random = new Random();
 
@@ -86,7 +85,7 @@ public class Locator {
         if (latitudes.length > 1) {
             for (int i = 0; i < latitudes.length; i++) {
                 if ((i != currentIndex) && (validLocations[i])) {
-                    if((latitudes[i] == latitudes[currentIndex]) && (longitudes[i] == longitudes[currentIndex])) {
+                    if ((latitudes[i] == latitudes[currentIndex]) && (longitudes[i] == longitudes[currentIndex])) {
                         return true;
                     }
                 }
@@ -121,26 +120,25 @@ public class Locator {
     public static double[] nextRandomLocation(final double currentLatitude, final double currentLongitude,
                                        final double transitionProbability,
                                        final double latitudeChange, final double longitudeChange) {
-        Random rand = new Random();
-        double probability = 0 + (1 - 0)*rand.nextDouble();
+        double probability = Math.random();
+        if (transitionProbability > probability) {
+            double newLatitude = currentLatitude + latitudeChange;
+            double newLongitude = currentLongitude + longitudeChange;
 
-        if (transitionProbability == probability) {
-            currentLatitude = currentLatitude * latitudeChange;
-            currentLongitude = currentLongitude * longitudeChange;
+            if (newLatitude > MAX_LATITUDE) {
+                newLatitude = MAX_LATITUDE;
+            }
+            if (newLatitude < MIN_LATITUDE) {
+                newLatitude = MIN_LATITUDE;
+            }
+            if (newLongitude > MAX_LONGITUDE) {
+                newLongitude = MAX_LONGITUDE;
+            }
+            if (newLongitude < MIN_LONGITUDE) {
+                newLongitude = MIN_LONGITUDE;
+            }
+            return new double[] {newLatitude, newLongitude};
         }
-        if (currentLatitude > 90.0) {
-            currentLatitude = 90.0;
-        }
-        if (currentLatitude < -90.0) {
-            currentLatitude = -90.0;
-        }
-        if (currentLongitude > 90.0) {
-            currentLongitude = 90.0;
-        }
-        if (currentLongitude < -90.0) {
-            currentLongitude = -90.0;
-        }
-
         return new double[] {currentLatitude, currentLongitude};
     }
 }
