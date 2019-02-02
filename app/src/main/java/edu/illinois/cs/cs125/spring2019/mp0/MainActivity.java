@@ -6,6 +6,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
+import android.widget.Button;
 import android.widget.Switch;
 import android.widget.ToggleButton;
 
@@ -314,6 +315,11 @@ public final class MainActivity extends FragmentActivity implements OnMapReadyCa
              */
             enableOrDisableLocation(setEnabled);
         });
+
+        ((Button) findViewById(R.id.center)).setOnClickListener(v -> {
+            centerMap();
+        });
+
 
         ((Switch) findViewById(R.id.wander)).setOnCheckedChangeListener((v, shouldWander) -> {
             /*
